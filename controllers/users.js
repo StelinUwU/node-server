@@ -41,10 +41,10 @@ const usersPut = async (req, res) => {
 
 const usersDelete = async (req, res = response) => {
   const { id } = req.params;
-
+  const authUser = req.user;
   //Borrar fisicamente
   const user = await User.findByIdAndUpdate(id, { state: false });
-
+  //const usuarioAutenticado, usuarioaBorrar
   res.json({ user });
 };
 const userPatch = (req, res) => {
