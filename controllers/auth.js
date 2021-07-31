@@ -30,7 +30,7 @@ const login = async (req, res = response) => {
     res.json({ user, token });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ msg: "Oops something went wrong " });
+    return res.status(500).json({ msg: "Oops something went wrong " });
   }
 };
 
@@ -49,14 +49,14 @@ const googleSignin = async (req, res = response) => {
 
     //Si el usuario en DB  tiene el estado en false
     if (!user.state) {
-      res.status(401).json({ msg: "User deleted" });
+      return res.status(401).json({ msg: "User deleted" });
     }
     //Generar el jwt
     const token = await generateJWT(user.id);
 
     res.json({ msg: "Todo ok! google signin", user, token });
   } catch (error) {
-    res.status(400).json({ msg: "Token is not valid" });
+    return res.status(400).json({ msg: "Token is not valid" });
   }
 };
 module.exports = {
