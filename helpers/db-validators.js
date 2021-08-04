@@ -38,10 +38,19 @@ const productValidation = async (id) => {
   }
 };
 
+const validateCollections = (collection = "", collections = []) => {
+  const isValid = collections.includes(collection);
+  if (!isValid) {
+    throw new Error("Invalid collection");
+  }
+  return true;
+};
+
 module.exports = {
   isValidRol,
   emailValidation,
   userByIDValidation,
   categoryValidation,
   productValidation,
+  validateCollections,
 };
