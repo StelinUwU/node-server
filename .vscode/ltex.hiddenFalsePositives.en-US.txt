@@ -1,0 +1,2 @@
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QLog in with emailSign in<script src=\"https://apis.google.com/js/platform.js\" async defer></script><script src=\"./js/auth.js\"></script></body></html>\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QLog in with emailSign in<script src=\"https://accounts.google.com/gsi/client\" async defer></script><script src=\"./js/auth.js\"></script></body></html>\\E$"}

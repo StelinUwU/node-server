@@ -2,7 +2,7 @@ const { response } = require("express");
 const User = require("../models/user");
 const bcryptjs = require("bcryptjs");
 const { generateJWT } = require("../helpers/generate-jwt");
-const { googleValidation } = require("../helpers/google-validation");
+const { googleVerify } = require("../helpers/google-validation");
 
 const login = async (req, res = response) => {
   const { email, password } = req.body;
@@ -36,30 +36,45 @@ const login = async (req, res = response) => {
 
 const googleSignin = async (req, res = response) => {
   const { id_token } = req.body;
-
   try {
-    const { email, name, img } = await googleValidation(id_token);
+    const { email, name, picture } = await googleVerify(id_token);
     let user = await User.findOne({ email });
     if (!user) {
-      //Tenemos que crearlo
-      const data = { name, email, password: ":p", img, google: true };
+      const data = {
+        name,
+        email,
+        password: ":P",
+        picture,
+        google: true,
+      };
+      console.log(data);
       user = new User(data);
       await user.save();
     }
-
-    //Si el usuario en DB  tiene el estado en false
     if (!user.state) {
-      return res.status(401).json({ msg: "User deleted" });
+      return res.status(401).json({
+        msg: "User deleted",
+      });
     }
-    //Generar el jwt
     const token = await generateJWT(user.id);
-
-    res.json({ msg: "Todo ok! google signin", user, token });
+    res.json({
+      user,
+      token,
+    });
   } catch (error) {
-    return res.status(400).json({ msg: "Token is not valid" });
+    console.log(error);
+    return res.status(400).json({ ok: false, msg: "Invalid data - id_token" });
   }
 };
+
+const validateToken = async (req, res = response) => {
+  const user = req.user;
+  const token = await generateJWT(user.id);
+  res.json({ user, token });
+};
+
 module.exports = {
   login,
   googleSignin,
+  validateToken,
 };
